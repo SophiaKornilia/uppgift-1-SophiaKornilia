@@ -15,7 +15,7 @@ let app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 // app.use(express.static());
-// app.use(cors());
+app.use(cors());
 
 // // //hämtar ordrar - använder aggregate - vida DatabaseConnection
 app.get("/getOrders", async (request, response) => {

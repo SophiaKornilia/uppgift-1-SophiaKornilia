@@ -66,3 +66,32 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+//navbar
+nav {
+  background-color: #006400;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+li {
+  margin-left: 20px;
+}
+
+NavLink {
+  text-decoration: none;
+  color: #000;
+  font-weight: bold;
+}
+
+NavLink:hover {
+  color: #ccc;
+}
