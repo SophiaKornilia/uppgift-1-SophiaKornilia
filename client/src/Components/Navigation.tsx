@@ -12,6 +12,11 @@ export const Navigation = () => {
               <button>Home</button>
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/admin">
+              <button>Admin</button>
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </>

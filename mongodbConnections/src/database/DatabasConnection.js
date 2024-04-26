@@ -50,6 +50,8 @@ class DatabaseConnection {
     return result.insertedId;
   }
 
+
+  //hur fungerar detta, fattar noll...
   async createProduct() {
     await this.connect();
 
@@ -62,8 +64,8 @@ class DatabaseConnection {
       description: null,
       image: null,
       amountInStock: 0,
-      price: 0,
-      category: null,
+      price: 0
+    //   category: null,
     });
 
     return result.insertedId;

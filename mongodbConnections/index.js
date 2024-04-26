@@ -13,7 +13,7 @@ DatabaseConnection.getInstance().setUrl(url);
 let app = express();
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 // app.use(express.static());
 app.use(cors());
 
@@ -39,6 +39,7 @@ app.post("/createOrder", async (request, response) => {
 });
 
 app.post("/products", async (request, response) => {
+  console.log("1", request.body);
   let id = await DatabaseConnection.getInstance().createProduct();
   await DatabaseConnection.getInstance().updateProduct(id, request.body);
 

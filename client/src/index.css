@@ -95,3 +95,97 @@ NavLink {
 NavLink:hover {
   color: #ccc;
 }
+/* Plantshop CSS */
+
+/* Generell styling */
+body {
+  font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.product-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-image {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.product-info {
+  padding: 20px 0;
+}
+
+.product-name {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.product-price {
+  font-size: 1.1em;
+  color: #4caf50;
+}
+
+/* Responsiv layout för tre kolumner */
+@media (min-width: 768px) {
+  .product-card {
+    width: calc(30% - 40px);
+    margin: 0 20px 20px 0;
+  }
+}
+
+.admin-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.admin-container h4 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.admin-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.admin-container input[type="text"],
+.admin-container input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.admin-container button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-container button:hover {
+  background-color: #0056b3;
+}
