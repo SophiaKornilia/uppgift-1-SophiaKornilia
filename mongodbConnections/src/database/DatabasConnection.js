@@ -1,3 +1,4 @@
+const { response } = require("express");
 let mongodb = require("mongodb");
 let instance = null;
 
@@ -19,7 +20,7 @@ class DatabaseConnection {
     await this.client.connect();
   }
 
-  async saveOrder(lineItems, customer) {
+  async saveOrder(LineItems, customer) {
     await this.connect();
     let db = this.client.db("Webbshop");
     let collection = db.collection("Orders");
@@ -33,7 +34,8 @@ class DatabaseConnection {
     }); // KATODO: calculate totalPrice
 
     let orderId = result.insertedId;
-    let encodedLineItems = lineItems.map((lineItem) => {
+    let encodedLineItems = LineItems.map((lineItem) => {
+      console.log(lineItem);
       return {
         amount: lineItem["amount"],
         totalPrice: 0, //KATODO: calculate
@@ -42,16 +44,12 @@ class DatabaseConnection {
       };
     });
 
-    let lineItemsCollection = db.collection("LineItem");
+    let lineItemsCollection = db.collection("LineItems");
     await lineItemsCollection.insertMany(encodedLineItems);
-
-    //KATODO: add lineItems
 
     return result.insertedId;
   }
 
-
-  //hur fungerar detta, fattar noll...
   async createProduct() {
     await this.connect();
 
@@ -64,8 +62,8 @@ class DatabaseConnection {
       description: null,
       image: null,
       amountInStock: 0,
-      price: 0
-    //   category: null,
+      price: 0,
+      //   category: null,
     });
 
     return result.insertedId;
@@ -143,22 +141,22 @@ class DatabaseConnection {
     let pipeline = [
       {
         $lookup: {
-          from: "LineItem",
-          localField: "order",
-          foreignField: "id",
+          from: "LineItems",
+          localField: "_id",
+          foreignField: "order",
           as: "LineItems",
           pipeline: [
             {
               $lookup: {
                 from: "Product",
-                localField: "id",
-                foreignField: "product",
+                localField: "product",
+                foreignField: "_id",
                 as: "product",
               },
             },
             {
               $addFields: {
-                linkedProduct: {
+                product: {
                   $first: "$product",
                 },
               },
@@ -169,14 +167,14 @@ class DatabaseConnection {
       {
         $lookup: {
           from: "Customer",
-          localField: "id",
-          foreignField: "customer",
+          localField: "customer",
+          foreignField: "_id",
           as: "customer",
         },
       },
       {
         $addFields: {
-          linkedCustomer: {
+          customer: {
             $first: "$customer",
           },
         },
@@ -190,6 +188,28 @@ class DatabaseConnection {
       returnArray.push(document);
     }
     return returnArray;
+  }
+
+  async createCustomer(customerData) {
+    await this.connect();
+
+    let db = this.client.db("Webbshop");
+    let customerCollection = db.collection("Customer");
+
+    let result = await customerCollection.insertOne({
+      _id: customerData.email,
+      firstName: customerData.firstName,
+      lastName: customerData.lastName,
+      passWord: customerData.passWord,
+      address: {
+        address1: customerData.address.address1,
+        address2: customerData.address.address2 || "", // optional
+        zipCode: customerData.address.zipCode,
+        city: customerData.address.city,
+      },
+    });
+
+    return result.insertedId;
   }
 
   static getInstance() {

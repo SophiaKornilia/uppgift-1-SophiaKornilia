@@ -6,10 +6,6 @@ let DatabaseConnection = require("./src/database/DatabasConnection");
 let url = "mongodb://localhost:27017";
 DatabaseConnection.getInstance().setUrl(url);
 
-// console.log(DatabaseConnection.getInstande());
-
-// console.log(DatabaseConnection.getInstande());
-
 let app = express();
 
 app.use(express.json());
@@ -21,6 +17,7 @@ app.use(cors());
 app.get("/getOrders", async (request, response) => {
   let orders = await DatabaseConnection.getInstance().getAllOrders();
   response.json({ orders });
+  console.log(orders);
 });
 
 app.get("/products", async (request, response) => {
@@ -31,7 +28,7 @@ app.get("/products", async (request, response) => {
 
 app.post("/createOrder", async (request, response) => {
   let orderId = await DatabaseConnection.getInstance().saveOrder(
-    request.body.lineItems,
+    request.body.LineItems,
     request.body.email
   );
   //KATODO:
@@ -55,20 +52,35 @@ app.post("/products/:id", async (request, response) => {
   response.json({ id: request.params.id });
 });
 
-// app.post("/createOrder", async (request, response) => {
-//   request.body.name;
-//   let customer = await DatabaseConnection.getInstande().getOrCreateCustomer(
-//     request.body.name,
-//     request.body.email,
-//     request.body.address
-//   );
+app.post("/createCustomer", async (request, response) => {
+  await DatabaseConnection.getInstance().createCustomer(request.body);
+  response.json({ message: "Customer created successfully" });
+});
+// app.post("/createCustomer", async (request, response) => {
+//   try {
+//     const client = await mongodb.MongoClient.connect(url)
 
-//   let order = await DatabaseConnection.getInstande().createOrder(
-//     request.lineItems,
-//     customer
-//   ); //KATODO : create function createOrder
+//     const db = client.db("Webbshop");
+//     const customerCollection = db.collection("Customer");
 
-//   response.json({ order });
+//     const result = await customerCollection.insertOne({
+//       _id: request.body.email,
+//       firstName: request.body.firstName,
+//       lastName: request.body.lastName,
+//       passWord: request.body.passWord,
+//       address: {
+//         address1: request.body.address.address1,
+//         address2: request.body.address.address2 || "", // optional
+//         zipCode: request.body.address.zipCode,
+//         city: request.body.address.city,
+//       },
+//     });
+
+//     response.json({ message: "Customer created successfully" });
+//   } catch (error) {
+//     console.error("Error creating customer:", error);
+//     response.status(500).json({ error: "Server error" });
+//   }
 // });
 
 // //Skapa en customer
@@ -83,17 +95,17 @@ app.post("/products/:id", async (request, response) => {
 //       let orderCollection = db.collection("Customer");
 
 //       return orderCollection
-//         .insertOne({
-//           _id: "test10@email.com",
-//           firstName: "Test10",
-//           lastName: "TestL10",
-//           passWord: "ThisShouldBeTheHashedPassword",
-//           adress: {
-//             adress1: "testStreet",
-//             adress2: "",
-//             zipCode: "12345",
-//             city: "Gothenburg",
-//           },
+// .insertOne({
+//   _id: "testmail@email.com",
+//   firstName: "Test2",
+//   lastName: "Test2",
+//   passWord: "Password",
+//   adress: {
+//     adress1: "testStreet",
+//     adress2: "",
+//     zipCode: "12345",
+//     city: "Gothenburg",
+//   },
 //         })
 
 //         .then(() => {
@@ -108,6 +120,22 @@ app.post("/products/:id", async (request, response) => {
 //     .finally(() => {
 //       client.close();
 //     });
+// });
+
+// app.post("/createOrder", async (request, response) => {
+//   request.body.name;
+//   let customer = await DatabaseConnection.getInstande().getOrCreateCustomer(
+//     request.body.name,
+//     request.body.email,
+//     request.body.address
+//   );
+
+//   let order = await DatabaseConnection.getInstande().createOrder(
+//     request.lineItems,
+//     customer
+//   ); //KATODO : create function createOrder
+
+//   response.json({ order });
 // });
 
 // // Skapa en order

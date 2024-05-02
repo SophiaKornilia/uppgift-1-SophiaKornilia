@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
 import "../index.css";
-interface IProduct {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-}
+import { useCart } from "../context/CartContext";
+import { IProduct } from "../context/CartContext";
 
 export const Home = () => {
+  const { addToCart } = useCart();
   const [products, setProducts] = useState<IProduct[]>([]);
 
   useEffect(() => {
@@ -40,7 +36,7 @@ export const Home = () => {
             />
             <h3>{product.name} </h3>
             <p>{product.price}sek</p>
-            <button>Add to cart</button>
+            <button onClick={() => addToCart(product)}>Add to cart</button>
           </div>
         ))}
       </div>

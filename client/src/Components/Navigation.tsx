@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import "../index.css";
+import { Payment } from "./Payment";
 
 export const Navigation = () => {
- 
   return (
     <>
       <nav>
@@ -15,6 +15,11 @@ export const Navigation = () => {
           <li>
             <NavLink to="/admin">
               <button>Admin</button>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/cart">
+              <button>Cart</button>
             </NavLink>
           </li>
         </ul>
