@@ -19,14 +19,14 @@ class DatabaseConnection {
     await this.client.connect();
   }
 
-  async saveOrder(LineItems, customer) {
+  async saveOrder(lineitems, customerId) {
     await this.connect();
 
     let db = this.client.db("Webbshop");
     let collection = db.collection("Orders");
 
     let result = await collection.insertOne({
-      customer: customer,
+      customer: new mongodb.ObjectId(customerId),
       orderDate: new Date(),
       status: "unpaid",
     });
@@ -35,13 +35,12 @@ class DatabaseConnection {
 
     let orderId = result.insertedId;
 
-    let encodedLineItems = LineItems.map((lineItem) => {
-      console.log(lineItem);
+    let encodedLineItems = lineitems.map((lineItem) => {
       return {
-        amount: lineItem["amount"],
-        totalPrice: 0,
+        amount: lineItem.quantity,
+        totalPrice: 0, // Update this if you have total price calculation
         order: new mongodb.ObjectId(orderId),
-        product: new mongodb.ObjectId(lineItem["product"]),
+        product: new mongodb.ObjectId(lineItem.product),
       };
     });
 
@@ -190,7 +189,7 @@ class DatabaseConnection {
     return returnArray;
   }
 
-  async createOrder(email, firstName, lastName, address) {
+  async createCustomer(email, firstName, lastName, address) {
     await this.connect();
 
     let db = this.client.db("Webbshop");
@@ -214,13 +213,6 @@ class DatabaseConnection {
       });
       return result.insertedId;
     }
-  }
-
-  static getInstance() {
-    if (instance === null) {
-      instance = new DatabaseConnection();
-    }
-    return instance;
   }
 }
 

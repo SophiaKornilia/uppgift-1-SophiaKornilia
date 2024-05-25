@@ -1,4 +1,3 @@
-let mongodb = require("mongodb");
 let express = require("express");
 let cors = require("cors");
 let DatabaseConnection = require("./src/database/DatabasConnection");
@@ -27,11 +26,21 @@ app.get("/products", async (request, response) => {
 });
 
 app.post("/createOrder", async (request, response) => {
-  let orderId = await DatabaseConnection.getInstance().saveOrder(
-    request.body.LineItems,
-    request.body.email
+  let { Customer, LineItems } = request.body;
+
+  // Skapa eller hämta kunden
+  let customerId = await DatabaseConnection.getInstance().createCustomer(
+    Customer.email,
+    Customer.firstName,
+    Customer.lastName,
+    Customer.address
   );
-  //KATODO:
+
+  let orderId = await DatabaseConnection.getInstance().saveOrder(
+    LineItems,
+    customerId
+  );
+
   response.json({ id: orderId });
 });
 

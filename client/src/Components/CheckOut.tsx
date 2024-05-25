@@ -19,7 +19,7 @@ interface IAddress {
 
 export const CheckOut = () => {
   const { cart } = useCart();
-  const [customer, setCustomer] = useState<ICustomer>({
+  const [Customer, setCustomer] = useState<ICustomer>({
     email: "",
     firstName: "",
     lastName: "",
@@ -51,16 +51,16 @@ export const CheckOut = () => {
         [name]: value,
       }));
     }
-    console.log("customer", customer);
+    console.log("customer", Customer);
   };
 
   const handleClick = async () => {
-    const lineitems = cart.map((item: ICartItem) => ({
+    const LineItems = cart.map((item: ICartItem) => ({
       product: item.product._id,
       quantity: item.quantity,
     }));
 
-    console.log(customer, lineitems);
+    console.log(Customer, LineItems);
 
     try {
       const response = await fetch("/createOrder", {
@@ -68,7 +68,7 @@ export const CheckOut = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ customer, lineitems }),
+        body: JSON.stringify({ Customer, LineItems }),
       });
 
       if (response.ok) {
@@ -92,7 +92,7 @@ export const CheckOut = () => {
           name="email"
           id="email"
           type="text"
-          value={customer.email}
+          value={Customer.email}
         />
         <label>Firstname</label>
         <input
@@ -100,7 +100,7 @@ export const CheckOut = () => {
           name="firstName"
           id="firstName"
           type="text"
-          value={customer.firstName}
+          value={Customer.firstName}
         />
         <label>Lastname</label>
         <input
@@ -108,7 +108,7 @@ export const CheckOut = () => {
           name="lastName"
           id="lastName"
           type="text"
-          value={customer.lastName}
+          value={Customer.lastName}
         />
         <p>address</p>
         <label>address1</label>
@@ -117,7 +117,7 @@ export const CheckOut = () => {
           name="address1"
           id="address1"
           type="text"
-          value={customer.address.address1}
+          value={Customer.address.address1}
         />
         <label>address2</label>
         <input
@@ -125,7 +125,7 @@ export const CheckOut = () => {
           name="address2"
           id="address2"
           type="text"
-          value={customer.address.address2}
+          value={Customer.address.address2}
         />
         <label>zipcode</label>
         <input
@@ -133,7 +133,7 @@ export const CheckOut = () => {
           name="zipCode"
           id="zipCode"
           type="number"
-          value={customer.address.zipCode}
+          value={Customer.address.zipCode}
         />
         <label>city</label>
         <input
@@ -141,7 +141,7 @@ export const CheckOut = () => {
           name="city"
           id="city"
           type="text"
-          value={customer.address.city}
+          value={Customer.address.city}
         />
         <label>country</label>
         <input
@@ -149,7 +149,7 @@ export const CheckOut = () => {
           name="country"
           id="country"
           type="text"
-          value={customer.address.country}
+          value={Customer.address.country}
         />
       </div>
       <button onClick={handleClick}>Pay</button>
