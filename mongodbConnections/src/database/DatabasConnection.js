@@ -1,4 +1,3 @@
-const { response } = require("express");
 let mongodb = require("mongodb");
 let instance = null;
 
@@ -36,20 +35,20 @@ class DatabaseConnection {
 
     let orderId = result.insertedId;
 
-    // let encodedLineItems = LineItems.map((lineItem) => {
-    //   console.log(lineItem);
-    //   return {
-    //     amount: lineItem["amount"],
-    //     totalPrice: 0,
-    //     order: new mongodb.ObjectId(orderId),
-    //     product: new mongodb.ObjectId(lineItem["product"]),
-    //   };
-    // });
+    let encodedLineItems = LineItems.map((lineItem) => {
+      console.log(lineItem);
+      return {
+        amount: lineItem["amount"],
+        totalPrice: 0,
+        order: new mongodb.ObjectId(orderId),
+        product: new mongodb.ObjectId(lineItem["product"]),
+      };
+    });
 
-    // let lineItemsCollection = db.collection("LineItems");
-    // await lineItemsCollection.insertMany(encodedLineItems);
+    let lineItemsCollection = db.collection("LineItems");
+    await lineItemsCollection.insertMany(encodedLineItems);
 
-    // return orderId;
+    return orderId;
   }
 
   async createProduct() {
@@ -226,153 +225,3 @@ class DatabaseConnection {
 }
 
 module.exports = DatabaseConnection;
-//   constructor() {
-//     console.log("DatabaseConnection: constructor");
-
-//     this.client = null;
-//     this.url = null;
-
-//     this.debugId = Math.floor(Math.random() * 10000);
-//   }
-
-//   setUrl(url) {
-//     this.url = url;
-//   }
-
-//   async connect() {
-//     if (!this.client) {
-//       this.client = new mongodb.MongoClient(this.url);
-
-//       await this.client.connect();
-//     }
-//   }
-
-//   async getAllOrders() {
-//     await this.connect();
-
-//     let db = this.client.db("Webbshop");
-//     let collection = db.collection("Orders");
-
-// let pipeline = [
-//   {
-//     $lookup: {
-//       from: "LineItem",
-//       localField: "order",
-//       foreignField: "id",
-//       as: "LineItems",
-//       pipeline: [
-//         {
-//           $lookup: {
-//             from: "Product",
-//             localField: "id",
-//             foreignField: "product",
-//             as: "linkedProduct",
-//           },
-//         },
-//         {
-//           $addFields: {
-//             linkedProduct: {
-//               $first: "$linkedProduct",
-//             },
-//           },
-//         },
-//       ],
-//     },
-//   },
-//   {
-//     $lookup: {
-//       from: "Customer",
-//       localField: "id",
-//       foreignField: "customer",
-//       as: "linkedCustomer",
-//     },
-//   },
-//   {
-//     $addFields: {
-//       linkedCustomer: {
-//         $first: "$linkedCustomer",
-//       },
-//     },
-//   },
-// ];
-
-//     let aggregate = collection.aggregate(pipeline);
-
-//     let orders = [];
-
-//     for await (let document of aggregate) {
-//       orders.push(document);
-//     }
-
-//     return orders;
-//   }
-
-//   async getOrCreateCustomer(email, name, address) {
-//     //KATODO
-
-//     return { id: 123456 }; //skriver för att testa men funktionen är ej klar
-//   }
-
-//   async createOrder(lineItems, customer) {
-//     //KATODO
-
-//     return { id: "order13345666" }; //skriver för att testa men funktionen är ej klar
-//   }
-
-//   static getInstande() {
-//     // skapas första gången, sedan returnera den skapade objektet
-//     if (instance === null) {
-//       instance = new DatabaseConnection();
-//     }
-//     return instance;
-//   }
-// }
-
-// module.exports = DatabaseConnection;
-
-// [
-//     {
-//       $lookup:
-//         {
-//           from: "LineItem",
-//           localField: "order",
-//           foreignField: "id",
-//           as: "LineItems",
-//         },
-//     },
-//     {
-//       $lookup:
-//         {
-//           from: "Customer",
-//           localField: "Customer",
-//           foreignField: "id",
-//           as: "customer",
-//         },
-//     },
-//     {
-//       $addFields:
-//         {
-//           customer: {
-//             $first: "$customer",
-//           },
-//         },
-//     },
-//   ]
-
-// [
-//     {
-//       $lookup: {
-//         from: "Product",
-//         localField: "Product",
-//         foreignField: "id",
-//         as: "product",
-//       },
-//     },
-//     {
-//       $addFields: {
-//         product: {
-//           $first: "$product",
-//         },
-//       },
-//     },
-//   ]

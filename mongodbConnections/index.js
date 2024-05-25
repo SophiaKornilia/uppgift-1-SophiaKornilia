@@ -29,7 +29,7 @@ app.get("/products", async (request, response) => {
 app.post("/createOrder", async (request, response) => {
   let orderId = await DatabaseConnection.getInstance().saveOrder(
     request.body.LineItems,
-    +request.body.email
+    request.body.email
   );
   //KATODO:
   response.json({ id: orderId });
