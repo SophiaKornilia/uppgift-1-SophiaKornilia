@@ -2,35 +2,35 @@ import { useEffect, useState } from "react";
 import "../index.css";
 import { IProduct } from "../context/CartContext";
 
+interface IOrder {
+  _id: string;
+  orderDate: Date;
+  paymentId: string;
+  status: string;
+  totalPrice: number;
+  customer: {
+    _id: string;
+    firstName: string;
+    LastName: string;
+    adress: {
+      adress1: string;
+      adress2: string;
+      zipCode: number;
+      city: string;
+      country: string;
+    };
+  };
+  LineItems: ILineItems[];
+}
+
+interface ILineItems {
+  _id: string;
+  orderId: number;
+  amount: number;
+  product: IProduct;
+}
 export const ShowOrders = () => {
   //interface med Orders
-  interface IOrder {
-    _id: string;
-    orderDate: Date;
-    paymentId: string;
-    status: string;
-    totalPrice: number;
-    customer: {
-      _id: string;
-      firstName: string;
-      LastName: string;
-      adress: {
-        adress1: string;
-        adress2: string;
-        zipCode: number;
-        city: string;
-        country: string;
-      };
-    };
-    LineItems: ILineItems[];
-  }
-
-  interface ILineItems {
-    _id: string;
-    orderId: number;
-    amount: number;
-    product: IProduct;
-  }
 
   const [orders, setOrders] = useState<IOrder[]>([]);
 
@@ -43,7 +43,7 @@ export const ShowOrders = () => {
         }
         const data = await response.json();
         console.log(data);
-        setOrders(data.orders);
+        setOrders(data);
       } catch (error) {
         console.error("Error fetching products", error);
       }
@@ -56,14 +56,14 @@ export const ShowOrders = () => {
   return (
     <>
       <div>
-        {orders.map((order) => (
+        {orders?.map((order) => (
           <div className="product-card" key={order._id}>
             <p>order Id: {order._id}</p>
             <p>total price: {order.totalPrice} sek</p>
             <p>orderstatus: {order.status} </p>
-            <p>customerId: {order.customer._id}</p>
-            <p>Firstname: {order.customer.firstName}</p>
-            <p>Lastname: {order.customer.LastName}</p>
+            <p>customerId: {order.customer?._id}</p>
+            <p>Firstname: {order.customer?.firstName}</p>
+            <p>Lastname: {order.customer?.LastName}</p>
 
             {order.LineItems.map((lineItem) => (
               <div>
