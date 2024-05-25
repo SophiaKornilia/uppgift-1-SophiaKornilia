@@ -28,7 +28,7 @@ app.get("/products", async (request, response) => {
 
 app.post("/createOrder", async (request, response) => {
   let orderId = await DatabaseConnection.getInstance().saveOrder(
-    request.body.LineItems,
+    request.body.LineItems,+
     request.body.email
   );
   //KATODO:
@@ -52,7 +52,7 @@ app.post("/products/:id", async (request, response) => {
   response.json({ id: request.params.id });
 });
 
-app.post("/createCustomer", async (request, response) => {
+app.post("/createOrder", async (request, response) => {
   await DatabaseConnection.getInstance().createCustomer(request.body);
   response.json({ message: "Customer created successfully" });
 });

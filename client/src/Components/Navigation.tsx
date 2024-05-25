@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import "../index.css";
-import { Payment } from "./Payment";
 
 export const Navigation = () => {
   return (

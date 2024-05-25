@@ -4,7 +4,7 @@ import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { AdminPage } from "./pages/AdminPage";
 import { Cart } from "./pages/Cart";
-import { CheckOut } from "./context/CheckOut";
+import { CheckOut } from "./Components/CheckOut";
 
 export const router = createBrowserRouter([
   {

@@ -22,23 +22,38 @@ class DatabaseConnection {
 
   async saveOrder(LineItems, customer) {
     await this.connect();
+
+    // let totalPrice = 0;
+
+    // if (LineItems) {
+    //   LineItems.forEach((lineItem) => {
+    //     let lineItemTotalPrice = lineItem.amount * lineItem.product.price;
+
+    //     totalPrice += lineItemTotalPrice;
+    //     console.log(totalPrice);
+    //   });
+    // }
+
     let db = this.client.db("Webbshop");
     let collection = db.collection("Orders");
 
     let result = await collection.insertOne({
       customer: customer,
       orderDate: new Date(),
-      paymentId: null,
+      // paymentId: null,
       status: "unpaid",
-      totalPrice: 0,
-    }); // KATODO: calculate totalPrice
+      totalPrice: totalPrice,
+    });
+
+    console.log("customer", customer);
 
     let orderId = result.insertedId;
+
     let encodedLineItems = LineItems.map((lineItem) => {
       console.log(lineItem);
       return {
         amount: lineItem["amount"],
-        totalPrice: 0, //KATODO: calculate
+        totalPrice: 0,
         order: new mongodb.ObjectId(orderId),
         product: new mongodb.ObjectId(lineItem["product"]),
       };
@@ -47,7 +62,7 @@ class DatabaseConnection {
     let lineItemsCollection = db.collection("LineItems");
     await lineItemsCollection.insertMany(encodedLineItems);
 
-    return result.insertedId;
+    return orderId;
   }
 
   async createProduct() {
@@ -190,26 +205,30 @@ class DatabaseConnection {
     return returnArray;
   }
 
-  async createCustomer(customerData) {
+  async createOrder(email, firstName, lastName, address) {
     await this.connect();
 
     let db = this.client.db("Webbshop");
     let customerCollection = db.collection("Customer");
 
-    let result = await customerCollection.insertOne({
-      _id: customerData.email,
-      firstName: customerData.firstName,
-      lastName: customerData.lastName,
-      passWord: customerData.passWord,
-      address: {
-        address1: customerData.address.address1,
-        address2: customerData.address.address2 || "", // optional
-        zipCode: customerData.address.zipCode,
-        city: customerData.address.city,
-      },
-    });
+    let existingCustomer = await collection.findOne({ _id: email });
 
-    return result.insertedId;
+    if (existingCustomer) {
+      return existingCustomer._id;
+    } else {
+      let result = await customerCollection.insertOne({
+        _id: email,
+        firstName: firstName,
+        lastName: lastName,
+        address: {
+          address1: address.address1,
+          address2: address.address2 || "", // optional
+          zipCode: address.zipCode,
+          city: address.city,
+        },
+      });
+      return result.insertedId;
+    }
   }
 
   static getInstance() {
