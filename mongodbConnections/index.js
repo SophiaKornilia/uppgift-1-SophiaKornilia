@@ -28,6 +28,7 @@ app.get("/products", async (request, response) => {
 app.post("/createOrder", async (request, response) => {
   let { Customer, LineItems } = request.body;
 
+  console.log("log", Customer, LineItems);
   // Skapa eller hämta kunden
   let customerId = await DatabaseConnection.getInstance().createCustomer(
     Customer.email,
@@ -35,6 +36,8 @@ app.post("/createOrder", async (request, response) => {
     Customer.lastName,
     Customer.address
   );
+
+  console.log("customerId", customerId);
 
   let orderId = await DatabaseConnection.getInstance().saveOrder(
     LineItems,

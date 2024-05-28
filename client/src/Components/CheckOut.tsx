@@ -63,7 +63,7 @@ export const CheckOut = () => {
     console.log(Customer, LineItems);
 
     try {
-      const response = await fetch("/createOrder", {
+      const response = await fetch("http://localhost:3000/createOrder", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

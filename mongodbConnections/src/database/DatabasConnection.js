@@ -26,12 +26,10 @@ class DatabaseConnection {
     let collection = db.collection("Orders");
 
     let result = await collection.insertOne({
-      customer: new mongodb.ObjectId(customerId),
+      customer: customerId,
       orderDate: new Date(),
       status: "unpaid",
     });
-
-    console.log("customer", customer);
 
     let orderId = result.insertedId;
 
@@ -195,7 +193,7 @@ class DatabaseConnection {
     let db = this.client.db("Webbshop");
     let customerCollection = db.collection("Customer");
 
-    let existingCustomer = await collection.findOne({ _id: email });
+    let existingCustomer = await customerCollection.findOne({ _id: email });
 
     if (existingCustomer) {
       return existingCustomer._id;
